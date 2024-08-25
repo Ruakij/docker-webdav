@@ -10,6 +10,7 @@ set -e
 #   PASSWORD
 #   ANONYMOUS_METHODS
 #   SSL_CERT
+#   CHOWN_USER
 
 # Just in case this environment variable has gone missing.
 HTTPD_PREFIX="${HTTPD_PREFIX:-/usr/local/apache2}"
@@ -101,6 +102,9 @@ fi
 # Create directories for Dav data and lock database.
 [ ! -d "/var/lib/dav/data" ] && mkdir -p "/var/lib/dav/data"
 [ ! -e "/var/lib/dav/DavLock" ] && touch "/var/lib/dav/DavLock"
-chown -R www-data:www-data "/var/lib/dav"
+
+if [ "$CHOWN_USER" != "" ]; then
+    chown -R www-data:www-data "/var/lib/dav"
+fi
 
 exec "$@"
